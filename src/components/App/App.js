@@ -24,7 +24,9 @@ export const App = () => {
                 <h1>Anotações na web</h1>
                 <Form
                     note={note}
-                    noteDescription={val => setNote(val)}
+                    noteDescription={val => {
+                        setNote(val);
+                    }}
                     createNote={n => createNote(n)}
                 />
             </header>

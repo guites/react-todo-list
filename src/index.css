@@ -36,3 +36,12 @@ footer {
 .listRight {
     width: 50%;
 }
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+small.red {
+    color: #cc0000;
+}
