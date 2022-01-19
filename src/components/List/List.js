@@ -1,19 +1,22 @@
 import { Item } from 'components';
-import styles from './styles.module.css';
+import Table from 'react-bootstrap/Table';
 
 export const List = ({ items }) => {
     return (
-        <div>
-            <h2>Anotações existentes</h2>
-            <ul className={styles.list}>
-                <li className="listItem">
-                    <div className="listLeft">Data</div>
-                    <div className="listRight">Nota</div>
-                </li>
+        <Table>
+            <caption>Lista de anotações existentes </caption>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Data</th>
+                    <th>Nota</th>
+                </tr>
+            </thead>
+            <tbody>
                 {items.map(item => (
                     <Item key={item.id} item={item} />
                 ))}
-            </ul>
-        </div>
+            </tbody>
+        </Table>
     );
 };

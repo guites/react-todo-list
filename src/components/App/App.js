@@ -1,5 +1,6 @@
-import { List, Form } from 'components';
+import { List, AddForm } from 'components';
 import { useState } from 'react';
+import Container from 'react-bootstrap/Container';
 
 export const App = () => {
     const [items, setItems] = useState([]);
@@ -27,23 +28,23 @@ export const App = () => {
         );
         if (duplicates.length > 0) {
             setNoteStatus({
-                status: 'red',
+                status: 'text-danger',
                 message: `Já existe uma anotação igual à esta para o dia ${dateOnly}`,
             });
             return;
         }
         setItems([...newItems, newNote]);
         setNoteStatus({
-            status: 'green',
+            status: 'text-success',
             message: 'Anotação criada com sucesso!',
         });
     };
 
     return (
         <div>
-            <header>
-                <h1>Anotações na web</h1>
-                <Form
+            <Container as="header" className="mb-5">
+                <h1 className="h2">Criar anotação</h1>
+                <AddForm
                     noteStatus={noteStatus}
                     note={note}
                     noteDescription={val => {
@@ -52,10 +53,11 @@ export const App = () => {
                     }}
                     createNote={n => createNote(n)}
                 />
-            </header>
-            <main>
+            </Container>
+            <Container as="main">
+                <h2 className="h3">Anotações</h2>
                 <List items={items} />
-            </main>
+            </Container>
         </div>
     );
 };
