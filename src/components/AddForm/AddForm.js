@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -6,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { useState, useRef, useEffect } from 'react';
 export const AddForm = ({
     note,
-    noteDescription,
+    updateNoteDescription,
     createNote,
     noteStatus,
 }) => {
@@ -17,7 +18,7 @@ export const AddForm = ({
         if (typeof noteStatus === 'object') {
             if (noteStatus.status === 'text-success') {
                 inputEl.current.value = '';
-                noteDescription('');
+                updateNoteDescription('');
             }
             if (noteStatus.status === 'text-danger')
                 inputEl.current.focus();
@@ -54,7 +55,7 @@ export const AddForm = ({
                     ref={inputEl}
                     onChange={e => {
                         const val = e.target.value;
-                        noteDescription(val);
+                        updateNoteDescription(val);
                         validateNote(val);
                     }}
                 />
@@ -82,4 +83,18 @@ export const AddForm = ({
             </Container>
         </Form>
     );
+};
+
+AddForm.propTypes = {
+    note: PropTypes.string,
+    updateNoteDescription: PropTypes.func,
+    createNote: PropTypes.func,
+    noteStatus: PropTypes.object,
+};
+
+AddForm.defaultProps = {
+    note: '',
+    updateNoteDescription: () => {},
+    createNote: () => {},
+    noteStatus: {},
 };

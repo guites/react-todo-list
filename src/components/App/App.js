@@ -47,8 +47,8 @@ export const App = () => {
                 <AddForm
                     noteStatus={noteStatus}
                     note={note}
-                    noteDescription={val => {
-                        if (val !== '') setNoteStatus('');
+                    updateNoteDescription={val => {
+                        if (val !== '') setNoteStatus({});
                         setNote(val);
                     }}
                     createNote={n => createNote(n)}
