@@ -1,7 +1,22 @@
-import { useState, useRef } from 'react';
-export const Form = ({ note, noteDescription, createNote }) => {
+import { useState, useRef, useEffect } from 'react';
+export const Form = ({
+    note,
+    noteDescription,
+    createNote,
+    noteStatus,
+}) => {
     const [validationError, setValidationError] = useState('');
     const inputEl = useRef(null);
+
+    useEffect(() => {
+        if (typeof noteStatus === 'object') {
+            if (noteStatus.status === 'green') {
+                inputEl.current.value = '';
+                noteDescription('');
+            }
+            if (noteStatus.status === 'red') inputEl.current.focus();
+        }
+    }, [noteStatus]);
 
     const validateNote = val => {
         if (val.length > 0) {
@@ -17,8 +32,6 @@ export const Form = ({ note, noteDescription, createNote }) => {
         e.preventDefault();
         if (validateNote(note)) {
             createNote(note);
-            inputEl.current.value = '';
-            noteDescription('');
         }
     };
 
@@ -36,9 +49,16 @@ export const Form = ({ note, noteDescription, createNote }) => {
                     validateNote(val);
                 }}
             />
-            {validationError !== '' && (
-                <small className="red">{validationError}</small>
-            )}
+            <div className="errors-wrapper">
+                {validationError !== '' && (
+                    <small className="red">{validationError}</small>
+                )}
+                {noteStatus.status && (
+                    <small className={noteStatus.status}>
+                        {noteStatus.message}
+                    </small>
+                )}
+            </div>
             <input type="submit" value="Criar anotação" />
         </form>
     );
