@@ -3,7 +3,9 @@ import { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 
 export const App = () => {
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState(
+        JSON.parse(localStorage.getItem('items')) || [],
+    );
     const [duplicatedError, setDuplicatedError] = useState(false);
 
     const createdNote = newNote => {
@@ -19,7 +21,9 @@ export const App = () => {
             return;
         }
         setDuplicatedError({});
-        setItems([...newItems, { ...newNote, id: newItems.length + 1 }]);
+        newItems.push({ ...newNote, id: newItems.length + 1 });
+        localStorage.setItem('items', JSON.stringify(newItems));
+        setItems(newItems);
     };
 
     return (
