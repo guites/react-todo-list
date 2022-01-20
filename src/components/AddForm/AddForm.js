@@ -5,32 +5,51 @@ import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 
 import { useState, useRef, useEffect } from 'react';
-export const AddForm = ({
-    note,
-    updateNoteDescription,
-    createNote,
-    noteStatus,
-}) => {
-    const [validationError, setValidationError] = useState('');
+
+export const AddForm = ({ createdNote, duplicatedError }) => {
+    const [note, setNote] = useState('');
+    const [status, setStatus] = useState({});
     const inputEl = useRef(null);
 
+    const createNote = n => {
+        const newNote = {
+            note: n,
+            date: new Intl.DateTimeFormat('pt-br', {
+                dateStyle: 'short',
+                timeStyle: 'short',
+            }).format(new Date()),
+        };
+
+        createdNote(newNote);
+    };
+
     useEffect(() => {
-        if (typeof noteStatus === 'object') {
-            if (noteStatus.status === 'text-success') {
-                inputEl.current.value = '';
-                updateNoteDescription('');
-            }
-            if (noteStatus.status === 'text-danger')
-                inputEl.current.focus();
+        if (duplicatedError === false) return;
+        const hasError = Object.keys(duplicatedError).length > 0;
+        setStatus({
+            status: hasError ? 'text-danger' : 'text-success',
+            message: hasError
+                ? `Anotação duplicada para o dia ${duplicatedError.date}`
+                : 'Anotação criada com sucesso!',
+        });
+    }, [duplicatedError]);
+
+    useEffect(() => {
+        if (typeof status === 'object') {
+            if (status.status === 'text-danger') inputEl.current.focus();
+            if (status.status === 'text-success') setNote('');
         }
-    }, [noteStatus]);
+    }, [status]);
 
     const validateNote = val => {
         if (val.length > 0) {
-            setValidationError('');
+            setStatus({});
             return true;
         }
-        setValidationError('Preencha a descrição!');
+        setStatus({
+            status: 'text-danger',
+            message: 'Preencha a descrição!',
+        });
         inputEl.current.focus();
         return false;
     };
@@ -42,9 +61,6 @@ export const AddForm = ({
         }
     };
 
-    // todo: find a way to keep only one validation error at a time. this way i dont have
-    // to dismiss noteStatus when submitting the form, and instead wait until another action is taken
-    // another error pops for the 'success' msg to go away
     return (
         <Form onSubmit={emitNote}>
             <Form.Group className="mb-3" controlId="note">
@@ -53,25 +69,19 @@ export const AddForm = ({
                     as="textarea"
                     placeholder="Descreva sua anotação..."
                     ref={inputEl}
+                    value={note}
                     onChange={e => {
                         const val = e.target.value;
-                        updateNoteDescription(val);
+                        setNote(val);
                         validateNote(val);
                     }}
                 />
             </Form.Group>
             <Container style={{ minHeight: '25px' }} className="mb-2">
-                {validationError !== '' && (
+                {status.status && (
                     <Row className="text-center">
-                        <small className="text-danger">
-                            {validationError}
-                        </small>
-                    </Row>
-                )}
-                {noteStatus.status && (
-                    <Row className="text-center">
-                        <small className={noteStatus.status}>
-                            {noteStatus.message}
+                        <small className={status.status}>
+                            {status.message}
                         </small>
                     </Row>
                 )}
@@ -86,15 +96,14 @@ export const AddForm = ({
 };
 
 AddForm.propTypes = {
-    note: PropTypes.string,
-    updateNoteDescription: PropTypes.func,
-    createNote: PropTypes.func,
-    noteStatus: PropTypes.object,
+    createdNote: PropTypes.func,
+    duplicatedError: PropTypes.oneOfType([
+        PropTypes.bool,
+        PropTypes.object,
+    ]),
 };
 
 AddForm.defaultProps = {
-    note: '',
-    updateNoteDescription: () => {},
-    createNote: () => {},
-    noteStatus: {},
+    duplicatedError: false,
+    createdNote: () => {},
 };

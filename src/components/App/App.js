@@ -4,40 +4,22 @@ import Container from 'react-bootstrap/Container';
 
 export const App = () => {
     const [items, setItems] = useState([]);
-    const [note, setNote] = useState('');
-    const [noteStatus, setNoteStatus] = useState({});
+    const [duplicatedError, setDuplicatedError] = useState(false);
 
-    const createNote = n => {
-        const newDateTime = new Date();
-        const dateOnly = new Intl.DateTimeFormat('pt-br').format(
-            newDateTime,
-        );
-        const newNote = {
-            id: items.length + 1,
-            note: n,
-            date: new Intl.DateTimeFormat('pt-br', {
-                dateStyle: 'short',
-                timeStyle: 'short',
-            }).format(newDateTime),
-        };
+    const createdNote = newNote => {
         const newItems = items.slice();
+        const newNoteDate = newNote.date.replace(/\s\d{2}:\d{2}/g, '');
         const duplicates = newItems.filter(
             item =>
                 item.note.trim() === newNote.note.trim() &&
-                item.date.replace(/\s\d{2}:\d{2}/g, '') === dateOnly,
+                item.date.replace(/\s\d{2}:\d{2}/g, '') === newNoteDate,
         );
         if (duplicates.length > 0) {
-            setNoteStatus({
-                status: 'text-danger',
-                message: `Já existe uma anotação igual à esta para o dia ${dateOnly}`,
-            });
+            setDuplicatedError({ ...newNote, date: newNoteDate });
             return;
         }
-        setItems([...newItems, newNote]);
-        setNoteStatus({
-            status: 'text-success',
-            message: 'Anotação criada com sucesso!',
-        });
+        setDuplicatedError({});
+        setItems([...newItems, { ...newNote, id: newItems.length + 1 }]);
     };
 
     return (
@@ -45,13 +27,8 @@ export const App = () => {
             <Container as="header" className="mb-5">
                 <h1 className="h2">Criar anotação</h1>
                 <AddForm
-                    noteStatus={noteStatus}
-                    note={note}
-                    updateNoteDescription={val => {
-                        if (val !== '') setNoteStatus({});
-                        setNote(val);
-                    }}
-                    createNote={n => createNote(n)}
+                    duplicatedError={duplicatedError}
+                    createdNote={n => createdNote(n)}
                 />
             </Container>
             <Container as="main">
