@@ -38,3 +38,7 @@ export const formatForTimeInput = date => {
     // returns ex. 12:25 or ''
     return d.replace(/\d{1,2}\/\d{1,2}\/\d{4} /, '');
 };
+
+export const capitalize = word => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+};
