@@ -157,7 +157,14 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
             <Container style={{ minHeight: '25px' }} className="mb-2">
                 {status.status && (
                     <Row className="text-center">
-                        <small className={status.status}>
+                        <small
+                            data-testid={
+                                status.status === 'text-danger'
+                                    ? 'validation-error'
+                                    : 'validation-success'
+                            }
+                            className={status.status}
+                        >
                             {status.message}
                         </small>
                     </Row>
