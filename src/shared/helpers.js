@@ -21,7 +21,20 @@ export const getCurrentDateTime = date => {
 };
 
 export const formatForDateInput = date => {
-    return date
+    let d = date || getCurrentDateTime();
+    return d
         .replace(/ \d{1,2}:\d{1,2}/, '')
         .replace(/(\d{1,2})\/(\d{1,2})\/(\d{4})/, '$3-$2-$1');
+};
+
+export const formatAsBrDate = date => {
+    if (/\d{4}-\d{2}-\d{2}/.test(date)) {
+        return date.replace(/(\d{4})-(\d{2})-(\d{2})/, '$3/$2/$1');
+    }
+};
+
+export const formatForTimeInput = date => {
+    let d = date || getCurrentDateTime();
+    // returns ex. 12:25 or ''
+    return d.replace(/\d{1,2}\/\d{1,2}\/\d{4} /, '');
 };

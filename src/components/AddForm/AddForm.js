@@ -7,22 +7,31 @@ import Button from 'react-bootstrap/Button';
 import {
     getCurrentTime,
     getCurrentDate,
-    getCurrentDateTime,
     formatForDateInput,
+    formatForTimeInput,
+    formatAsBrDate,
 } from 'shared';
 
 import { useState, useRef, useEffect } from 'react';
 
 export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
-    const [note, setNote] = useState(editNote?.note || '');
-    const [date, setDate] = useState(editNote?.date || '');
     const [id, setId] = useState(editNote?.id || '');
+    const [dateTime, setDateTime] = useState(editNote?.dateTime);
+    const [note, setNote] = useState(editNote?.note || '');
+    const [date, setDate] = useState(
+        formatForDateInput(editNote?.dateTime),
+    );
+    const [time, setTime] = useState(
+        formatForTimeInput(editNote?.dateTime),
+    );
     const [status, setStatus] = useState({});
     const inputEl = useRef(null);
+    const timeEl = useRef(null);
+    const dateEl = useRef(null);
 
     const emitNote = e => {
         e.preventDefault();
-        if (validateNote(note)) {
+        if (validateNote(note) && validateDateTime()) {
             createNote(note);
         }
     };
@@ -30,7 +39,7 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
     const createNote = n => {
         const newNote = {
             note: n,
-            date: getCurrentDateTime(),
+            date: formatAsBrDate(date) + ' ' + time,
         };
 
         createdNote(newNote);
@@ -49,8 +58,11 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
 
     useEffect(() => {
         if (typeof status === 'object') {
-            if (status.status === 'text-danger') inputEl.current.focus();
-            if (status.status === 'text-success') setNote('');
+            if (status.status === 'text-success') {
+                setNote('');
+                setDate(getCurrentDate());
+                setTime(getCurrentTime());
+            }
         }
     }, [status]);
 
@@ -67,6 +79,26 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
         return false;
     };
 
+    const validateDateTime = () => {
+        const s = {
+            status: 'text-danger',
+        };
+        if (date === '') {
+            s.message = 'Preencha a data!';
+            dateEl.current.focus();
+            setStatus(s);
+            return false;
+        }
+        if (time === '') {
+            s.message = 'Preencha a hora!';
+            timeEl.current.focus();
+            setStatus(s);
+            return false;
+        }
+        setStatus({});
+        return true;
+    };
+
     return (
         <Form onSubmit={emitNote} data-testid="add-note-form">
             <Row>
@@ -74,18 +106,11 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
                     <Form.Group className="mb-3" controlId="date">
                         <Form.Label>Data</Form.Label>
                         <Form.Control
-                            value={
-                                formatForDateInput(date) ||
-                                getCurrentDate()
-                            }
+                            ref={dateEl}
+                            value={date}
                             type="date"
                             onChange={e => {
                                 let val = e.target.value;
-                                if (val !== '') {
-                                    val = getCurrentDateTime(
-                                        val + ' ' + getCurrentTime(),
-                                    );
-                                }
                                 setDate(val);
                             }}
                         />
@@ -95,8 +120,22 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
                     <Form.Group className="mb-3" controlId="time">
                         <Form.Label>Hora</Form.Label>
                         <Form.Control
-                            placeholder={getCurrentTime()}
-                            onChange={e => {}}
+                            ref={timeEl}
+                            value={time}
+                            onBlur={e => {
+                                if (e.currentTarget.value === '')
+                                    setTime(getCurrentTime());
+                            }}
+                            onChange={e => {
+                                e.currentTarget.maxLength = 5;
+                                let val = e.currentTarget.value;
+                                val = val.replace(/\D/g, '');
+                                val = val.replace(
+                                    /(\d{2})(\d{1,2})/,
+                                    '$1:$2',
+                                );
+                                setTime(val);
+                            }}
                         />
                     </Form.Group>
                 </Col>
