@@ -59,7 +59,7 @@ test('Closes edit modal by pressing close button', () => {
 
     expect(screen.queryByTestId('edit-note-modal')).toBeInTheDocument();
 
-    const closeBtn = screen.queryByRole('button', { name: /close/i });
+    const closeBtn = screen.queryByRole('button', { name: /fechar/i });
 
     expect(closeBtn).toBeInTheDocument();
 
