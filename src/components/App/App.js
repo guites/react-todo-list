@@ -1,4 +1,9 @@
-import { List, NotesForm, EditNoteModal } from 'components';
+import {
+    List,
+    NotesForm,
+    EditNoteModal,
+    ConfirmDeleteModal,
+} from 'components';
 import { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 
@@ -9,6 +14,7 @@ export const App = () => {
     const [duplicatedError, setDuplicatedError] = useState(false);
     const [duplicatedEditError, setDuplicatedEditError] = useState(false);
     const [isEditingNote, setIsEditingNote] = useState(false);
+    const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
     const createdNote = newNote => {
         const newItems = items.slice();
@@ -65,7 +71,15 @@ export const App = () => {
     };
 
     const handleDelete = item => {
-        console.log(item);
+        setIsConfirmingDelete(item);
+    };
+
+    const deleteItem = item => {
+        const newItems = items.slice();
+        const filteredItems = newItems.filter(i => i.id !== item.id);
+        localStorage.setItem('items', JSON.stringify(filteredItems));
+        setItems(filteredItems);
+        setIsConfirmingDelete(false);
     };
 
     return (
@@ -91,6 +105,13 @@ export const App = () => {
                     onClose={() => setIsEditingNote(false)}
                     item={isEditingNote}
                     updatedNote={n => updatedNote(n)}
+                />
+            )}
+            {isConfirmingDelete && (
+                <ConfirmDeleteModal
+                    confirmDelete={i => deleteItem(i)}
+                    onClose={() => setIsConfirmingDelete(false)}
+                    item={isConfirmingDelete}
                 />
             )}
         </div>
