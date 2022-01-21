@@ -1,9 +1,4 @@
-import {
-    render,
-    screen,
-    fireEvent,
-    waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Item } from './Item';
 
 test('Fires the EDIT function when edit button is clicked', async () => {
