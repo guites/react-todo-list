@@ -8,7 +8,7 @@ import {
     capitalize,
 } from 'shared';
 
-export const List = ({ items }) => {
+export const List = ({ items, onEditClick, onDeleteClick }) => {
     const [listItems, setListItems] = useState([]);
     const [orderBy, setOrderBy] = useState('id');
     const [order, setOrder] = useState('asc');
@@ -72,7 +72,7 @@ export const List = ({ items }) => {
     }, [items]);
 
     return (
-        <Table>
+        <Table className="table-hover">
             <caption>Lista de anotações existentes </caption>
             <thead>
                 <tr>
@@ -99,11 +99,22 @@ export const List = ({ items }) => {
                         </Button>
                     </th>
                     <th>Nota</th>
+                    <th>Editar</th>
+                    <th>Deletar</th>
                 </tr>
             </thead>
             <tbody>
                 {listItems.map(item => (
-                    <Item key={item.id} item={item} />
+                    <tr
+                        data-testid={'row-' + item.id}
+                        key={'row-' + item.id}
+                    >
+                        <Item
+                            item={item}
+                            editFn={onEditClick}
+                            deleteFn={onDeleteClick}
+                        />
+                    </tr>
                 ))}
             </tbody>
         </Table>

@@ -52,6 +52,8 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
             status: hasError ? 'text-danger' : 'text-success',
             message: hasError
                 ? `Anotação duplicada para o dia ${duplicatedError.date}`
+                : editNote
+                ? 'Anotação atualizada com sucesso!'
                 : 'Anotação criada com sucesso!',
         });
     }, [duplicatedError]);
@@ -59,9 +61,11 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
     useEffect(() => {
         if (typeof status === 'object') {
             if (status.status === 'text-success') {
-                setNote('');
-                setDate(getCurrentDate());
-                setTime(getCurrentTime());
+                if (!editNote) {
+                    setNote('');
+                    setDate(getCurrentDate());
+                    setTime(getCurrentTime());
+                }
             }
         }
     }, [status]);
