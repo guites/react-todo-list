@@ -4,7 +4,7 @@ export const Item = ({ item, editFn, deleteFn }) => {
     return (
         <>
             <td data-testid={'item-' + item.id}>{item.id}</td>
-            <td>{item.date}</td>
+            <td>{item.dateTime}</td>
             <td>{item.note}</td>
             <td>
                 <Button

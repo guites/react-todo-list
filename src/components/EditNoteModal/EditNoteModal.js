@@ -8,7 +8,9 @@ export const EditNoteModal = ({
     duplicatedError,
     updatedNote,
 }) => {
-    const handleClose = () => onClose();
+    const handleClose = () => {
+        onClose();
+    };
     const createdNote = n => {
         updatedNote(n);
     };
@@ -29,14 +31,6 @@ export const EditNoteModal = ({
                     editNote={item}
                 />
             </Modal.Body>
-            <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close
-                </Button>
-                <Button variant="primary" onClick={handleClose}>
-                    Save Changes
-                </Button>
-            </Modal.Footer>
         </Modal>
     );
 };

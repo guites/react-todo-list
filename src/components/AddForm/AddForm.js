@@ -15,8 +15,7 @@ import {
 import { useState, useRef, useEffect } from 'react';
 
 export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
-    const [id, setId] = useState(editNote?.id || '');
-    const [dateTime, setDateTime] = useState(editNote?.dateTime);
+    const [id] = useState(editNote?.id || null);
     const [note, setNote] = useState(editNote?.note || '');
     const [date, setDate] = useState(
         formatForDateInput(editNote?.dateTime),
@@ -39,9 +38,9 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
     const createNote = n => {
         const newNote = {
             note: n,
-            date: formatAsBrDate(date) + ' ' + time,
+            dateTime: formatAsBrDate(date) + ' ' + time,
         };
-
+        if (editNote) newNote.id = id;
         createdNote(newNote);
     };
 
@@ -69,6 +68,16 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
             }
         }
     }, [status]);
+
+    // prevents message from a an edit modal
+    // showing on another item's modal
+    useEffect(() => {
+        setStatus({});
+        if (editNote) {
+            inputEl.current.focus();
+            inputEl.current.selectionStart = inputEl.current.value.length;
+        }
+    }, []);
 
     const validateNote = val => {
         if (val.length > 0) {
@@ -128,7 +137,13 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
                             value={time}
                             onBlur={e => {
                                 if (e.currentTarget.value === '')
-                                    setTime(getCurrentTime());
+                                    editNote
+                                        ? setTime(
+                                              formatForTimeInput(
+                                                  editNote.dateTime,
+                                              ),
+                                          )
+                                        : setTime(getCurrentTime());
                             }}
                             onChange={e => {
                                 e.currentTarget.maxLength = 5;
@@ -176,7 +191,7 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
             </Container>
             <Container className="text-center">
                 <Button className="block" variant="primary" type="submit">
-                    Criar anotação
+                    {editNote ? 'Atualizar anotação' : 'Criar anotação'}
                 </Button>
             </Container>
         </Form>

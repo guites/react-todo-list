@@ -12,11 +12,12 @@ export const App = () => {
 
     const createdNote = newNote => {
         const newItems = items.slice();
-        const newNoteDate = newNote.date.replace(/\s\d{2}:\d{2}/g, '');
+        const newNoteDate = newNote.dateTime.replace(/\s\d{2}:\d{2}/g, '');
         const duplicates = newItems.filter(
             item =>
                 item.note.trim() === newNote.note.trim() &&
-                item.date.replace(/\s\d{2}:\d{2}/g, '') === newNoteDate,
+                item.dateTime.replace(/\s\d{2}:\d{2}/g, '') ===
+                    newNoteDate,
         );
         if (duplicates.length > 0) {
             setDuplicatedError({ ...newNote, date: newNoteDate });
@@ -30,14 +31,14 @@ export const App = () => {
 
     const updatedNote = updatedNote => {
         const newItems = items.slice();
-        const updatedNoteDate = updatedNote.date.replace(
+        const updatedNoteDate = updatedNote.dateTime.replace(
             /\s\d{2}:\d{2}/g,
             '',
         );
         const duplicates = newItems.filter(
             item =>
                 item.note.trim() === updatedNote.note.trim() &&
-                item.date.replace(/\s\d{2}:\d{2}/g, '') ===
+                item.dateTime.replace(/\s\d{2}:\d{2}/g, '') ===
                     updatedNoteDate,
         );
         if (duplicates.length > 0) {
@@ -48,10 +49,18 @@ export const App = () => {
             return;
         }
         setDuplicatedEditError({});
+        for (let i = 0; i < newItems.length; i++) {
+            if (newItems[i].id === updatedNote.id) {
+                newItems[i].dateTime = updatedNote.dateTime;
+                newItems[i].note = updatedNote.note;
+                break;
+            }
+        }
+        localStorage.setItem('items', JSON.stringify(newItems));
+        setItems(newItems);
     };
 
     const handleEdit = item => {
-        console.log(item);
         setIsEditingNote(item);
     };
 
