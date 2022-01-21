@@ -143,7 +143,7 @@ describe('Edit Note', () => {
             name: /anotação/i,
         });
         const submitButton = screen.queryByRole('button', {
-            name: /criar anotação/i,
+            name: /atualizar anotação/i,
         });
 
         expect(timeInput).toBeInTheDocument();
