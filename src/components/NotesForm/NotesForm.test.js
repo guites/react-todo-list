@@ -1,19 +1,11 @@
-import {
-    render,
-    screen,
-    fireEvent,
-    cleanup,
-    waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { getCurrentDate, getCurrentTime } from 'shared';
-import { AddForm } from './AddForm';
-
-afterEach(cleanup);
+import { NotesForm } from './NotesForm';
 
 describe('Create Note', () => {
     test('Initializes empty form', () => {
-        render(<AddForm />);
+        render(<NotesForm />);
 
         const dateInput = screen.queryByLabelText(/data/i);
         const timeInput = screen.queryByRole('textbox', { name: /hora/i });
@@ -42,7 +34,7 @@ describe('Create Note', () => {
     });
 
     test('Inputs are required', async () => {
-        render(<AddForm />);
+        render(<NotesForm />);
 
         const dateInput = screen.getByLabelText(/data/i);
         const timeInput = screen.getByRole('textbox', { name: /hora/i });
@@ -86,7 +78,7 @@ describe('Create Note', () => {
     test('Submit function is not called if invalid', () => {
         const onSubmit = jest.fn();
 
-        render(<AddForm createdNote={onSubmit} />);
+        render(<NotesForm createdNote={onSubmit} />);
 
         const dateInput = screen.getByLabelText(/data/i);
         const timeInput = screen.getByRole('textbox', { name: /hora/i });
@@ -131,10 +123,10 @@ describe('Create Note', () => {
     });
 });
 
-describe.only('Edit Note', () => {
+describe('Edit Note', () => {
     test('Initializes form with note info', () => {
         render(
-            <AddForm
+            <NotesForm
                 editNote={{
                     id: 1,
                     dateTime: '19/01/2022 22:54',

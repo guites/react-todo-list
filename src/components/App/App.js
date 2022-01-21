@@ -1,4 +1,4 @@
-import { List, AddForm, EditNoteModal } from 'components';
+import { List, NotesForm, EditNoteModal } from 'components';
 import { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 
@@ -72,7 +72,7 @@ export const App = () => {
         <div>
             <Container as="header" className="mb-5">
                 <h1 className="h2">Criar anotação</h1>
-                <AddForm
+                <NotesForm
                     duplicatedError={duplicatedError}
                     createdNote={n => createdNote(n)}
                 />

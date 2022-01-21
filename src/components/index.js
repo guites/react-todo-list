@@ -1,5 +1,5 @@
 export * from './App';
 export * from './EditNoteModal';
-export * from './AddForm';
+export * from './NotesForm';
 export * from './List';
 export * from './Item';

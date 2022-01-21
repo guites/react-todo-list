@@ -1,6 +1,6 @@
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import { AddForm } from 'components';
+import { NotesForm } from 'components';
 
 export const EditNoteModal = ({
     item,
@@ -24,8 +24,7 @@ export const EditNoteModal = ({
                 <Modal.Title>Editar anotação #{item.id}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                {/* This should just render a <NotesForm/> component */}
-                <AddForm
+                <NotesForm
                     duplicatedError={duplicatedError}
                     createdNote={n => createdNote(n)}
                     editNote={item}

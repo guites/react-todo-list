@@ -14,7 +14,7 @@ import {
 
 import { useState, useRef, useEffect } from 'react';
 
-export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
+export const NotesForm = ({ createdNote, duplicatedError, editNote }) => {
     const [id] = useState(editNote?.id || null);
     const [note, setNote] = useState(editNote?.note || '');
     const [date, setDate] = useState(
@@ -198,7 +198,7 @@ export const AddForm = ({ createdNote, duplicatedError, editNote }) => {
     );
 };
 
-AddForm.propTypes = {
+NotesForm.propTypes = {
     createdNote: PropTypes.func,
     duplicatedError: PropTypes.oneOfType([
         PropTypes.bool,
@@ -206,7 +206,7 @@ AddForm.propTypes = {
     ]),
 };
 
-AddForm.defaultProps = {
+NotesForm.defaultProps = {
     duplicatedError: false,
     createdNote: () => {},
 };
