@@ -20,8 +20,10 @@ export const EditNoteModal = ({
             show="true"
             onHide={handleClose}
         >
-            <Modal.Header closeButton>
-                <Modal.Title>Editar anotação #{item.id}</Modal.Title>
+            <Modal.Header closeButton closeLabel="Fechar">
+                <Modal.Title data-testid="edit-note-modal-title">
+                    Editar anotação #{item.id}
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <NotesForm
