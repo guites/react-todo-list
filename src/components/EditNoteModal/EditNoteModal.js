@@ -13,7 +13,11 @@ export const EditNoteModal = ({
         updatedNote(n);
     };
     return (
-        <Modal show="true" onHide={handleClose}>
+        <Modal
+            data-testid="edit-note-modal"
+            show="true"
+            onHide={handleClose}
+        >
             <Modal.Header closeButton>
                 <Modal.Title>Editar anotação #{item.id}</Modal.Title>
             </Modal.Header>
