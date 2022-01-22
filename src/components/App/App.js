@@ -3,8 +3,9 @@ import {
     NotesForm,
     EditNoteModal,
     ConfirmDeleteModal,
+    ToastPortal,
 } from 'components';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Container from 'react-bootstrap/Container';
 
 export const App = () => {
@@ -15,6 +16,20 @@ export const App = () => {
     const [duplicatedEditError, setDuplicatedEditError] = useState(false);
     const [isEditingNote, setIsEditingNote] = useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+    // toast related definitions
+    const toastRef = useRef();
+    const [autoCloseToast, setAutoCloseToast] = useState({
+        shouldAutoClose: false,
+        toastId: null,
+    });
+    const addToast = (_mode, _text, _title) => {
+        const toastId = toastRef.current.addMessage({
+            mode: _mode,
+            title: _title,
+            message: _text,
+        });
+        return toastId;
+    };
 
     const createdNote = newNote => {
         const newItems = items.slice();
@@ -89,8 +104,18 @@ export const App = () => {
         localStorage.setItem('items', JSON.stringify(filteredItems));
         setItems(filteredItems);
         setIsConfirmingDelete(false);
+        //TODO #1 add a toast with deletion info (maybe auto closing?)
+        const toastId = addToast(
+            'success',
+            `Você deletou a nota #${item.id} datada ${item.dateTime}`,
+            `Nota deletada!`,
+        );
+        //TODO #3 glitch: progress bar only shows for latest toast
+        setAutoCloseToast({ shouldAutoClose: true, toastId: toastId });
+        // TODO #4 implementation: soft delete notes and show option to undo removal/list deleted notes
     };
 
+    //TODO #6 search note by text/date
     return (
         <div>
             <Container as="header" className="mb-5">
@@ -123,6 +148,7 @@ export const App = () => {
                     item={isConfirmingDelete}
                 />
             )}
+            <ToastPortal ref={toastRef} autoClose={autoCloseToast} />
         </div>
     );
 };
