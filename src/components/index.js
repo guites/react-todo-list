@@ -5,4 +5,4 @@ export * from './NotesForm';
 export * from './List';
 export * from './Item';
 export * from './ToastPortal';
-export * from './Toast';
+export * from './MyToast';

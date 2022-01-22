@@ -47,7 +47,12 @@ export const ToastPortal = forwardRef(
                         <MyToast
                             key={t.id}
                             mode={t.mode}
-                            progress={autoClose?.toastId === t.id}
+                            progress={autoClose.includes(
+                                autoClose.find(
+                                    autoClose =>
+                                        autoClose.toastId === t.id,
+                                ),
+                            )}
                             message={t.message}
                             title={t.title}
                             onClose={() => removeToast(t.id)}

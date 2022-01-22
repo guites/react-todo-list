@@ -7,6 +7,8 @@ export const MyToast = ({ mode, onClose, message, title, progress }) => {
     const [currProg, setCurrProg] = useState(0);
     const [toastVariant, setToastVariant] = useState(mode);
 
+    console.log(progress);
+
     useEffect(() => {
         const interval = setInterval(() => {
             if (parseInt(currProg) >= 100)

@@ -18,10 +18,7 @@ export const App = () => {
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
     // toast related definitions
     const toastRef = useRef();
-    const [autoCloseToast, setAutoCloseToast] = useState({
-        shouldAutoClose: false,
-        toastId: null,
-    });
+    const [autoCloseToasts, setAutoCloseToasts] = useState([]);
     const addToast = (_mode, _text, _title) => {
         const toastId = toastRef.current.addMessage({
             mode: _mode,
@@ -104,14 +101,15 @@ export const App = () => {
         localStorage.setItem('items', JSON.stringify(filteredItems));
         setItems(filteredItems);
         setIsConfirmingDelete(false);
-        //TODO #1 add a toast with deletion info (maybe auto closing?)
         const toastId = addToast(
             'success',
             `Você deletou a nota #${item.id} datada ${item.dateTime}`,
             `Nota deletada!`,
         );
-        //TODO #3 glitch: progress bar only shows for latest toast
-        setAutoCloseToast({ shouldAutoClose: true, toastId: toastId });
+        setAutoCloseToasts([
+            ...autoCloseToasts,
+            { shouldAutoClose: true, toastId: toastId },
+        ]);
         // TODO #4 implementation: soft delete notes and show option to undo removal/list deleted notes
     };
 
@@ -148,7 +146,7 @@ export const App = () => {
                     item={isConfirmingDelete}
                 />
             )}
-            <ToastPortal ref={toastRef} autoClose={autoCloseToast} />
+            <ToastPortal ref={toastRef} autoClose={autoCloseToasts} />
         </div>
     );
 };
