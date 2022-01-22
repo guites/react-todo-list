@@ -45,6 +45,7 @@ export const App = () => {
             return;
         }
         setDuplicatedError({});
+        //TODO #7 Duplicated ids being generated
         newItems.push({ ...newNote, id: newItems.length + 1 });
         localStorage.setItem('items', JSON.stringify(newItems));
         setItems(newItems);
@@ -101,9 +102,12 @@ export const App = () => {
             `Você deletou a nota #${item.id} datada ${item.dateTime}`,
             `Nota deletada!`,
         );
-        // setAutoCloseToast({ shouldAutoClose: true, toastId: toastId });
+        //TODO #3 glitch: progress bar only shows for latest toast
+        setAutoCloseToast({ shouldAutoClose: true, toastId: toastId });
+        // TODO #4 implementation: soft delete notes and show option to undo removal/list deleted notes
     };
 
+    //TODO #6 search note by text/date
     return (
         <div>
             <Container as="header" className="mb-5">
