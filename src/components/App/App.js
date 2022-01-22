@@ -3,8 +3,9 @@ import {
     NotesForm,
     EditNoteModal,
     ConfirmDeleteModal,
+    ToastPortal,
 } from 'components';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Container from 'react-bootstrap/Container';
 
 export const App = () => {
@@ -15,6 +16,17 @@ export const App = () => {
     const [duplicatedEditError, setDuplicatedEditError] = useState(false);
     const [isEditingNote, setIsEditingNote] = useState(false);
     const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+    // toast related definitions
+    const toastRef = useRef();
+    const [autoCloseToasts, setAutoCloseToasts] = useState([]);
+    const addToast = (_mode, _text, _title) => {
+        const toastId = toastRef.current.addMessage({
+            mode: _mode,
+            title: _title,
+            message: _text,
+        });
+        return toastId;
+    };
 
     const createdNote = newNote => {
         const newItems = items.slice();
@@ -42,6 +54,15 @@ export const App = () => {
         newItems.push({ ...newNote, id: biggestItemId + 1 });
         localStorage.setItem('items', JSON.stringify(newItems));
         setItems(newItems);
+        const toastId = addToast(
+            'success',
+            `Você criou a nota #${biggestItemId + 1}!`,
+            `Nota registrada!`,
+        );
+        setAutoCloseToasts([
+            ...autoCloseToasts,
+            { shouldAutoClose: true, toastId: toastId },
+        ]);
     };
 
     const updatedNote = updatedNote => {
@@ -73,6 +94,15 @@ export const App = () => {
         }
         localStorage.setItem('items', JSON.stringify(newItems));
         setItems(newItems);
+        const toastId = addToast(
+            'info',
+            `Você editou a nota #${updatedNote.id}!`,
+            `Nota atualizada!`,
+        );
+        setAutoCloseToasts([
+            ...autoCloseToasts,
+            { shouldAutoClose: true, toastId: toastId },
+        ]);
     };
 
     const handleEdit = item => {
@@ -89,8 +119,19 @@ export const App = () => {
         localStorage.setItem('items', JSON.stringify(filteredItems));
         setItems(filteredItems);
         setIsConfirmingDelete(false);
+        const toastId = addToast(
+            'danger',
+            `Você deletou a nota #${item.id} datada ${item.dateTime}`,
+            `Nota deletada!`,
+        );
+        setAutoCloseToasts([
+            ...autoCloseToasts,
+            { shouldAutoClose: true, toastId: toastId },
+        ]);
+        // TODO #4 implementation: soft delete notes and show option to undo removal/list deleted notes
     };
 
+    //TODO #6 search note by text/date
     return (
         <div>
             <Container as="header" className="mb-5">
@@ -123,6 +164,7 @@ export const App = () => {
                     item={isConfirmingDelete}
                 />
             )}
+            <ToastPortal ref={toastRef} autoClose={autoCloseToasts} />
         </div>
     );
 };

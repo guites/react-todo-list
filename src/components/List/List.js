@@ -70,6 +70,7 @@ export const List = ({ items, onEditClick, onDeleteClick }) => {
         sortAndSetState(orderBy, order, _items, false);
     }, [items]);
 
+    //TODO #5 paginate results when there are more than 10 notes
     return (
         <Table className="table-hover">
             <caption>Lista de anotações existentes </caption>
