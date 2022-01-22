@@ -1,10 +1,27 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import Toast from 'react-bootstrap/Toast';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 export const MyToast = ({ mode, onClose, message, title, progress }) => {
+    //TODO #2 getting many rerenders of this components, must bring back useMemo
+    const [currProg, setCurrProg] = useState(0);
+    const [toastVariant, setToastVariant] = useState(mode);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (parseInt(currProg) >= 100)
+                return setToastVariant('warning');
+            setCurrProg(parseInt(currProg) + 2);
+        }, 100);
+        return () => clearInterval(interval);
+    });
+
     return (
-        <Toast bg={mode} onClose={onClose}>
+        <Toast
+            show={toastVariant !== 'warning'}
+            bg={toastVariant}
+            onClose={onClose}
+        >
             <Toast.Header>
                 <img
                     src="holder.js/20x20?text=%20"
@@ -12,27 +29,24 @@ export const MyToast = ({ mode, onClose, message, title, progress }) => {
                     alt=""
                 />
                 <strong className="me-auto text-dark">{title}</strong>
-                <small
-                    style={
-                        mode === 'success'
-                            ? { color: 'rgb(71 77 82)' }
-                            : ''
-                    }
-                >
-                    11 mins ago
-                </small>
             </Toast.Header>
             <Toast.Body>
                 <p style={mode === 'success' ? { color: '#000' } : ''}>
                     {message}
                 </p>
             </Toast.Body>
-            <ProgressBar
-                style={{ borderRadius: '0' }}
-                animated
-                variant={mode}
-                now={100}
-            />
+            {progress && (
+                <ProgressBar
+                    style={{
+                        borderRadius: '0',
+                        transition: 'width 0 linear',
+                        transitionDelay: '0',
+                    }}
+                    animated
+                    variant={toastVariant}
+                    now={currProg}
+                />
+            )}
         </Toast>
     );
 };

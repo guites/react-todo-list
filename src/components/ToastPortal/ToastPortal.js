@@ -17,7 +17,7 @@ import { useState, forwardRef, useImperativeHandle } from 'react';
  */
 
 export const ToastPortal = forwardRef(
-    ({ autoClose = {}, autoCloseTime = 5000 }, ref) => {
+    ({ autoClose = {}, autoCloseTime = 10000 }, ref) => {
         const [toasts, setToasts] = useState([]);
         const { loaded, portalId } = useToastPortal();
 
@@ -47,6 +47,7 @@ export const ToastPortal = forwardRef(
                         <MyToast
                             key={t.id}
                             mode={t.mode}
+                            progress={autoClose?.toastId === t.id}
                             message={t.message}
                             title={t.title}
                             onClose={() => removeToast(t.id)}
