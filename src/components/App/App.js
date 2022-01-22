@@ -45,8 +45,16 @@ export const App = () => {
             return;
         }
         setDuplicatedError({});
-        //TODO #7 Duplicated ids being generated
-        newItems.push({ ...newNote, id: newItems.length + 1 });
+        const biggestItemId =
+            newItems.length === 0
+                ? 0
+                : Math.max.apply(
+                      Math,
+                      newItems.map(function (_item) {
+                          return _item.id;
+                      }),
+                  );
+        newItems.push({ ...newNote, id: biggestItemId + 1 });
         localStorage.setItem('items', JSON.stringify(newItems));
         setItems(newItems);
     };
