@@ -85,6 +85,15 @@ export const App = () => {
         }
         localStorage.setItem('items', JSON.stringify(newItems));
         setItems(newItems);
+        const toastId = addToast(
+            'info',
+            `Você editou a nota #${updatedNote.id}!`,
+            `Nota atualizada!`,
+        );
+        setAutoCloseToasts([
+            ...autoCloseToasts,
+            { shouldAutoClose: true, toastId: toastId },
+        ]);
     };
 
     const handleEdit = item => {

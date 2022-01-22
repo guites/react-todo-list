@@ -7,8 +7,6 @@ export const MyToast = ({ mode, onClose, message, title, progress }) => {
     const [currProg, setCurrProg] = useState(0);
     const [toastVariant, setToastVariant] = useState(mode);
 
-    console.log(progress);
-
     useEffect(() => {
         const interval = setInterval(() => {
             if (parseInt(currProg) >= 100)
@@ -33,7 +31,11 @@ export const MyToast = ({ mode, onClose, message, title, progress }) => {
                 <strong className="me-auto text-dark">{title}</strong>
             </Toast.Header>
             <Toast.Body>
-                <p style={mode === 'success' ? { color: '#000' } : ''}>
+                <p
+                    className={
+                        mode === 'success' ? 'acessibility-black' : ''
+                    }
+                >
                     {message}
                 </p>
             </Toast.Body>
