@@ -54,6 +54,15 @@ export const App = () => {
         newItems.push({ ...newNote, id: biggestItemId + 1 });
         localStorage.setItem('items', JSON.stringify(newItems));
         setItems(newItems);
+        const toastId = addToast(
+            'success',
+            `Você criou a nota #${biggestItemId + 1}!`,
+            `Nota registrada!`,
+        );
+        setAutoCloseToasts([
+            ...autoCloseToasts,
+            { shouldAutoClose: true, toastId: toastId },
+        ]);
     };
 
     const updatedNote = updatedNote => {
@@ -111,7 +120,7 @@ export const App = () => {
         setItems(filteredItems);
         setIsConfirmingDelete(false);
         const toastId = addToast(
-            'success',
+            'danger',
             `Você deletou a nota #${item.id} datada ${item.dateTime}`,
             `Nota deletada!`,
         );
