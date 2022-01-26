@@ -1,70 +1,45 @@
-# Getting Started with Create React App
+# Basic react todo app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a basic to-do app using reactjs. It persists data on the client using localStorage.
 
-## Available Scripts
+This is a study project. 
 
-In the project directory, you can run:
+## Check the project out
 
-### `npm start`
+There are 5 main functionalities with which the user can interact:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Creating new tasks.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+All fields are required. You may not create two tasks with the same description for the same day.
 
-### `npm test`
+2. Editing tasks.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Editing is subject to the same validations above, as it reuses the form component.
 
-### `npm run build`
+3. Deleting tasks.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+There is a confirmation modal to avoid mistakenly deleting notes. 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Sorting existing notes.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Notes can be sorted by id or date.
 
-### `npm run eject`
+5. All CRUD actions are signalized by a toast pop up.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Tests
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Components have an equivalent .test.js file in its folder.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+#### improvements
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Tasks that are in the past must be marked as complete.
 
-## Learn More
+2. Accept nested tasks, as in, a task can bear a sublist of tasks that must be checked before it is considered complete.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+3. Tasks that are in the past with non-completed subtasks must be marked as late/delayed
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+4. Subtasks cannot have a date greater than its parent task.
 
-### Code Splitting
+5. Deploy via github pages.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+6. Subject deploy to passing tests.
