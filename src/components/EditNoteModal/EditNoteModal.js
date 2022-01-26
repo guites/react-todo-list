@@ -1,5 +1,4 @@
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import { NotesForm } from 'components';
 
 export const EditNoteModal = ({
