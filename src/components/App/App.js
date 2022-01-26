@@ -5,13 +5,11 @@ import {
     ConfirmDeleteModal,
     ToastPortal,
 } from 'components';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 
 export const App = () => {
-    const [items, setItems] = useState(
-        JSON.parse(localStorage.getItem('items')) || [],
-    );
+    const [items, setItems] = useState([]);
     const [duplicatedError, setDuplicatedError] = useState(false);
     const [duplicatedEditError, setDuplicatedEditError] = useState(false);
     const [isEditingNote, setIsEditingNote] = useState(false);
@@ -28,6 +26,31 @@ export const App = () => {
         return toastId;
     };
 
+    useEffect(() => {
+        const itemsInStorage = localStorage.getItem('items');
+        // adapted from https://stackoverflow.com/a/3710226/14427854
+        let itemsArray;
+        try {
+            itemsArray = JSON.parse(itemsInStorage);
+        } catch (e) {
+            itemsArray = false;
+        }
+        // prevents app from breaking if localStorage.getItem('items') is invalid json
+        if (itemsArray && Array.isArray(itemsArray)) {
+            // filters badly formatted note objects
+            itemsArray = itemsArray.filter(
+                item =>
+                    item.hasOwnProperty('id') &&
+                    !isNaN(Number(item.id)) &&
+                    item.hasOwnProperty('note') &&
+                    item.hasOwnProperty('dateTime') &&
+                    /\d{2}\/\d{2}\/\d{4}\s\d{2}:\d{2}/.test(item.dateTime),
+            );
+            return setItems(itemsArray);
+        }
+        return [];
+    }, []);
+
     const createdNote = newNote => {
         const newItems = items.slice();
         const newNoteDate = newNote.dateTime.replace(/\s\d{2}:\d{2}/g, '');
@@ -38,7 +61,7 @@ export const App = () => {
                     newNoteDate,
         );
         if (duplicates.length > 0) {
-            setDuplicatedError({ ...newNote, date: newNoteDate });
+            setDuplicatedError({ ...newNote, dateTime: newNoteDate });
             return;
         }
         setDuplicatedError({});
