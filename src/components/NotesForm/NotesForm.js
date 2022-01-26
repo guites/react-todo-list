@@ -50,7 +50,7 @@ export const NotesForm = ({ createdNote, duplicatedError, editNote }) => {
         setStatus({
             status: hasError ? 'text-danger' : 'text-success',
             message: hasError
-                ? `Anotação duplicada para o dia ${duplicatedError.date}`
+                ? `Anotação duplicada para o dia ${duplicatedError.dateTime}`
                 : editNote
                 ? 'Anotação atualizada com sucesso!'
                 : 'Anotação criada com sucesso!',
@@ -74,6 +74,8 @@ export const NotesForm = ({ createdNote, duplicatedError, editNote }) => {
     useEffect(() => {
         setStatus({});
         if (editNote) {
+            // sets focus to text area and sets cursor to end
+            // of existing text
             inputEl.current.focus();
             inputEl.current.selectionStart = inputEl.current.value.length;
         }
@@ -103,6 +105,7 @@ export const NotesForm = ({ createdNote, duplicatedError, editNote }) => {
             return false;
         }
         if (time === '') {
+            // TODO #11 validate that time is correctly formatted, ex using regex /\d{2}\/\d{2}\/\d{4}\s\d{2}:\d{2}/.test(time)
             s.message = 'Preencha a hora!';
             timeEl.current.focus();
             setStatus(s);
