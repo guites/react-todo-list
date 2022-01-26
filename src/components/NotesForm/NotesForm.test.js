@@ -33,7 +33,7 @@ describe('Create Note', () => {
         ).not.toBeInTheDocument();
     });
 
-    test('Inputs are required', async () => {
+    test('Inputs are required and valid', async () => {
         render(<NotesForm />);
 
         const dateInput = screen.getByLabelText(/data/i);
@@ -54,6 +54,8 @@ describe('Create Note', () => {
         expect(validationErrorMessage).toHaveTextContent(
             'Preencha a descrição!',
         );
+
+        // TODO check that time input is being validated correctly. this must be done after issue https://github.com/guites/react-todo-list/issues/11
 
         // userEvent here instead of fireEvent.change as it triggers onBlur effects
         userEvent.type(timeInput, '{space}');

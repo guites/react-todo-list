@@ -119,7 +119,10 @@ export const NotesForm = ({ createdNote, duplicatedError, editNote }) => {
         <Form onSubmit={emitNote} data-testid="add-note-form">
             <Row>
                 <Col>
-                    <Form.Group className="mb-3" controlId="date">
+                    <Form.Group
+                        className="mb-3"
+                        controlId={editNote ? `date-edit` : 'date'}
+                    >
                         <Form.Label>Data</Form.Label>
                         <Form.Control
                             ref={dateEl}
@@ -133,7 +136,10 @@ export const NotesForm = ({ createdNote, duplicatedError, editNote }) => {
                     </Form.Group>
                 </Col>
                 <Col>
-                    <Form.Group className="mb-3" controlId="time">
+                    <Form.Group
+                        className="mb-3"
+                        controlId={editNote ? `time-edit` : 'time'}
+                    >
                         <Form.Label>Hora</Form.Label>
                         <Form.Control
                             ref={timeEl}
@@ -162,7 +168,10 @@ export const NotesForm = ({ createdNote, duplicatedError, editNote }) => {
                     </Form.Group>
                 </Col>
             </Row>
-            <Form.Group className="mb-3" controlId="note">
+            <Form.Group
+                className="mb-3"
+                controlId={editNote ? `note-edit` : 'note'}
+            >
                 <Form.Label>Anotação</Form.Label>
                 <Form.Control
                     as="textarea"
